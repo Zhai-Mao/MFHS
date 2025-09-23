@@ -5,5 +5,5 @@ This is the repository for MFHS:Mutual Consistency Learning-based foundation mod
 <div>
 <h2>Get Started</h2>
 </div>
-1.Creat a environment `conda create -n MFHS` and activate it `conda activate MFHS`
+1.Creat a environment  `conda create -n MFHS`  and activate it  `conda activate MFHS`
 2.git clone 
