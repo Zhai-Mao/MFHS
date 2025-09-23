@@ -5,6 +5,7 @@
 Xuejun Liu, Zhaichao Tang, Yonghao Wu*, Ruixiang Zhai, Xuanhe Dong,
 Zikang Dua, Shujun Cao
 </div>
+### abstract
 Medical image segmentation is crucial for clinical practice, but fully supervised deep learning methods are hindered by the high cost of expert annotations.
 Semi-Supervised Learning (SSL) offers a compelling solution by leveraging abundant unlabeled data, yet existing SSL methods face two primary limitations: they often neglect the rich, generalizable knowledge from vision foundation models, and their reliance on pairwise relationships inadequately captures complex anatomical structures.
 In this paper, we propose MFHS, a novel semi-supervised framework that synergizes a vision foundation model with hypergraph learning to address these challenges.
