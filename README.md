@@ -8,4 +8,20 @@ This is the repository for MFHS:Mutual Consistency Learning-based foundation mod
 
 ## Get Started  
 First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from SSL4MS.  
+Then download the SAM2 pre-trained checkpoints named [sam2_hiera_large](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to obtain the corresponding checkpoint files.
+
+## Training  
+```shell
+python train.py 
+```
+
+## Testing  
+```shell
+python test.py
+```
+## Acknowledgement
+[SAM2-UNet](https://github.com/WZH0120/SAM2-UNet)
+[SSL4MIS](https://github.com/HiLab-git/SSL4MIS/tree/master)
+[HyperYolo](https://github.com/iMoonLab/Hyper-YOLO)
+[MCNet](https://github.com/ycwu1997/MC-Net)
 
