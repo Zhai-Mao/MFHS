@@ -1,4 +1,3 @@
-
-## <div align="center">
-MFHS:Mutual Consistency Learning-based foundation model integrates Hypergraph Computation for Semi-supervised Medical Image Segmentation
+<div align="center">
+<h2>MFHS:Mutual Consistency Learning-based foundation model integrates Hypergraph Computation for Semi-supervised Medical Image Segmentation</h2>
 </div>
