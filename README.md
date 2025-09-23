@@ -7,4 +7,5 @@ This is the repository for MFHS:Mutual Consistency Learning-based foundation mod
 4.Then install the packages `pip install -r reauireents.txt`
 
 ## Get Started  
-First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC)
+First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from SSL4MS.  
+
