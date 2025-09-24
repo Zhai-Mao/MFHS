@@ -6,10 +6,10 @@ This is the repository for MFHS : Mutual Consistency Learning-based foundation m
 1.Creat a environment  `conda create -n MFHS`  and activate it  `conda activate MFHS`  
 2.`git clone https://github.com/Zhai-Mao/MFHS`  
 3.Enter the MFHS folder `cd MFHS` and run  `pip install -e.`  
-4.Then install the packages `pip install -r reauireents.txt`
+4.Then install the packages `pip install -r requiremnts.txt`
 
 ## 👉 Get Started  
-First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from SSL4MS.  
+First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from SSL4MS.  Here, we need to place the list file of ACDC in the specified folder.  
 Then download the SAM2 pre-trained checkpoints named [sam2_hiera_large](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to obtain the corresponding checkpoint files.
 
 ## 👉 Training  
