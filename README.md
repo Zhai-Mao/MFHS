@@ -2,6 +2,8 @@
 **This is the repository for MFHS : Mutual Consistency Learning-based foundation model integrates Hypergraph Computation for Semi-supervised Medical Image Segmentation**  
 
 ![framework](pictures/framework.png)
+## Requirements
+Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
 ## 🛠️ Installation
 - Creat a environment  `conda create -n MFHS`  and activate it  `conda activate MFHS`
 - `git clone https://github.com/Zhai-Mao/MFHS`  
@@ -9,8 +11,8 @@
 - Then install the packages `pip install -r requiremnts.txt`
 
 ## 👉 Get Started  
-First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from SSL4MS.  Here, we need to place the list file of ACDC in the specified folder.  
-Then download the SAM2 pre-trained checkpoints named [sam2_hiera_large](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to obtain the corresponding checkpoint files.
+First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from **SSL4MS**.  Here, we need to place the list file of ACDC in the specified folder.  
+Then download the **SAM2 pre-trained checkpoints** named [sam2_hiera_large](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to obtain the corresponding checkpoint files.
 
 ## ✅ Training  
 ```shell
