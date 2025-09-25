@@ -6,27 +6,27 @@
 Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
 ## 🛠️ Installation
 - Creat a environment  `conda create -n MFHS`  and activate it  `conda activate MFHS`
-```shell
-conda create -n MFHS
-```
-```shell
-conda activate MFHS
-```
+  ```shell
+  conda create -n MFHS
+  ```
+  ```shell
+  conda activate MFHS
+  ```
 - `git clone https://github.com/Zhai-Mao/MFHS`
-```shell
-git clone https://github.com/Zhai-Mao/MFHS
-```
+  ```shell
+  git clone https://github.com/Zhai-Mao/MFHS
+  ```
 - Enter the MFHS folder `cd MFHS` and run  `pip install -e.`
-```shell
-cd MFHS
-```
-```shell
-pip install -e.
-```
+  ```shell
+  cd MFHS
+  ```
+  ```shell
+  pip install -e.
+  ```
 - Then install the packages `pip install -r requiremnts.txt`
-```shell
-pip install -r requiremnts.txt
-```
+  ```shell
+  pip install -r requiremnts.txt
+  ```
 
 ## 👉 Get Started  
 First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from **SSL4MS**.  Here, we need to place the list file of ACDC in the specified folder.  
