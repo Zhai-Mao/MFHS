@@ -5,12 +5,19 @@
 ## Contents
 - [Abstract](#abstract)
 - [Requirements](#requirements)
+- [Installation](#install-section)
+- [Get Started](#get_started)
+- [Training](#training)
+- [Testing](#testing)
+- [Acknowledge](#acknowledge)
 ## Abstract
 In this paper, we propose MFHS, a novel semi-supervised framework that synergizes a vision foundation model with hypergraph learning to address these challenges.
 Our framework leverages a pre-trained SAM2 encoder to extract robust hierarchical features, which are then refined by a hypergraph neural network that explicitly models many-to-many high-order relationships among anatomical structures.
 For semi-supervised training, we employ a multi-decoder architecture to generate high-quality pseudo-labels through a cross-consistency mechanism, further enhanced by an adversarial learning module.
 ## Requirements
 Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
+
+<a id="install-section"></a>
 ## 🛠️ Installation
 - Creat a environment  `conda create -n MFHS`  and activate it  `conda activate MFHS`
   ```shell
@@ -35,6 +42,7 @@ Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
   pip install -r requiremnts.txt
   ```
 
+<a id="get_started"></a>
 ## 👉 Get Started
 First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from **SSL4MS**.  Here, we need to place the list file of ACDC in the specified folder.  
 ```shell
@@ -60,15 +68,18 @@ Then download the **SAM2 pre-trained checkpoints** named [sam2_hiera_large](http
     └── sam2_hiera_tiny.pt
 ```
 
+<a id="training"></a>
 ## ✅ Training  
 ```shell
 python train.py
 ```
 
+<a id="testing"></a>
 ## 🎬 Testing  
 ```shell
 python test.py
 ```
+<a id="acknowledge"></a>
 ## 🤝 Acknowledgement
 We are very grateful to the contributors of the following open-source projects and other referenced content.
 - [SAM2-UNet](https://github.com/WZH0120/SAM2-UNet)
