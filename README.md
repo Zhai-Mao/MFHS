@@ -2,6 +2,10 @@
 **This is the repository for MFHS : Mutual Consistency Learning-based foundation model integrates Hypergraph Computation for Semi-supervised Medical Image Segmentation.**  
 
 ![framework](pictures/framework.png)
+## Abstract  
+In this paper, we propose MFHS, a novel semi-supervised framework that synergizes a vision foundation model with hypergraph learning to address these challenges.
+Our framework leverages a pre-trained SAM2 encoder to extract robust hierarchical features, which are then refined by a hypergraph neural network that explicitly models many-to-many high-order relationships among anatomical structures.
+For semi-supervised training, we employ a multi-decoder architecture to generate high-quality pseudo-labels through a cross-consistency mechanism, further enhanced by an adversarial learning module.
 ## Requirements
 Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
 ## 🛠️ Installation
