@@ -45,7 +45,13 @@ First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/mast
        │   ├── patient001_frame02.h5
        └── ...
 ```
-Then download the **SAM2 pre-trained checkpoints** named [sam2_hiera_large](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to obtain the corresponding checkpoint files.
+Then download the **SAM2 pre-trained checkpoints** named [sam2_hiera_large](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to obtain the corresponding checkpoint files.  
+```shell
+├── MFHS/
+    ├── sam2_hiera_large.pt
+    ├── sam2_hiera_small.pt
+    └── sam2_hiera_tiny.pt
+```
 
 ## ✅ Training  
 ```shell
