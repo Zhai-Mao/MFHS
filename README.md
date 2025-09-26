@@ -32,18 +32,18 @@ Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
 First Download the dataset [ACDC](https://github.com/HiLab-git/SSL4MIS/tree/master/data/ACDC) from **SSL4MS**.  Here, we need to place the list file of ACDC in the specified folder.  
 ```shell
 ├── MFHS/
-│  ├── ACDC/
-│  │   ├── data/
-│  │   │   ├── slices/
-│  │   │   │   ├── train_slices.list
-│  │   │   │   ├── val.list
-│  │   │   │   ├── patient001_frame01_slice_1.h5
-│  │   │   │   ├── patient001_frame01_slice_2.h5
-│  │   │   │   └── ...
-│  │   │   ├── test.list
-│  │   │   ├── patient001_frame01.h5
-│  │   │   ├── patient001_frame02.h5
-...    └── ...
+    ├── ACDC/
+       ├── data/
+       │   ├── slices/
+       │   │   ├── train_slices.list
+       │   │   ├── val.list
+       │   │   ├── patient001_frame01_slice_1.h5
+       │   │   ├── patient001_frame01_slice_2.h5
+       │   │   └── ...
+       │   ├── test.list
+       │   ├── patient001_frame01.h5
+       │   ├── patient001_frame02.h5
+       └── ...
 ```
 Then download the **SAM2 pre-trained checkpoints** named [sam2_hiera_large](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to obtain the corresponding checkpoint files.
 
