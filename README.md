@@ -68,24 +68,30 @@ Then download the **SAM2 pre-trained checkpoints** named [sam2_hiera_large](http
 
 <a id="training"></a>
 ## ✅ Training  
+Training a model based on sam2 large.
 ```shell
 python train2d_L.py --model="SAM2UNetL" --hiera_path="sam2_hiera_large.pt" --labeled_num=3
 ```
+Training a model based on sam2 small.
 ```shell
 python train2d_L.py --model="SAM2UNetS" --hiera_path="sam2_hiera_small.pt" --labeled_num=3
 ```
+Training a model based on sam2 tiny.
 ```shell
 python train2d_L.py --model="SAM2UNetT" --hiera_path="sam2_hiera_tiny.pt" --labeled_num=3
 ```
 
 <a id="testing"></a>
 ## 🎬 Testing  
+Testing a model based on sam2 large.
 ```shell
 python test.py --model="SAM2UNetL" --labeled_num=3
 ```
+Testing a model based on sam2 small.
 ```shell
 python test.py --model="SAM2UNetS" --labeled_num=3
 ```
+Testing a model based on sam2 tiny.
 ```shell
 python test.py --model="SAM2UNetT" --labeled_num=3
 ```
