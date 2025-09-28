@@ -69,7 +69,7 @@ Then download the **SAM2 pre-trained checkpoints** named [sam2_hiera_large](http
 <a id="training"></a>
 ## ✅ Training  
 ```shell
-python train.py
+python train2d_L.py
 ```
 
 <a id="testing"></a>
