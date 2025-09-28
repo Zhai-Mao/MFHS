@@ -1,0 +1,14 @@
+hydra-core==1.3.2
+h5py
+opencv-python
+timm
+einops
+scipy
+hydra-core
+torch
+torchvision
+torchaudio
+yacs
+PyYAML
+matplotlib
+medpy
