@@ -102,4 +102,5 @@ We are very grateful to the contributors of the following open-source projects a
 - [SSL4MIS](https://github.com/HiLab-git/SSL4MIS/tree/master)
 - [HyperYolo](https://github.com/iMoonLab/Hyper-YOLO)
 - [MCNet](https://github.com/ycwu1997/MC-Net)
+- [ultralytics](https://github.com/ultralytics/ultralytics/tree/main)
 
