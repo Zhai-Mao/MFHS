@@ -11,6 +11,7 @@ For semi-supervised training, we employ a multi-decoder architecture to generate
 - [Training](#training)
 - [Testing](#testing)
 - [Acknowledge](#acknowledge)
+- [Citations](#citations)
 - [Contact](#contact)
 
 ## Requirements
@@ -104,6 +105,21 @@ We are very grateful to the contributors of the following open-source projects a
 - [HyperYolo](https://github.com/iMoonLab/Hyper-YOLO)
 - [MCNet](https://github.com/ycwu1997/MC-Net)
 - [ultralytics](https://github.com/ultralytics/ultralytics/tree/main)
+
+## Citations
+```shell
+@article{LIU2025112721,
+title = {MFHS: Mutual Consistency Learning-Based Foundation Model Integrates Hypergraph for Semi-Supervised Medical Image Segmentation},
+journal = {Pattern Recognition},
+pages = {112721},
+year = {2025},
+issn = {0031-3203},
+doi = {https://doi.org/10.1016/j.patcog.2025.112721},
+url = {https://www.sciencedirect.com/science/article/pii/S0031320325013846},
+author = {Xuejun Liu and Zhaichao Tang and Yonghao Wu and Ruixiang Zhai and Xuanhe Dong and Zikang Du and Shujun Cao},
+keywords = {Medical Image Segmentation, Semi-Supervised Learning, Vision Foundation Models, Hypergraph Learning, Pseudo-Labeling, Adversarial Learning}
+}
+```
 
 ## 📫Contact
 ```shell
