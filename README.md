@@ -39,7 +39,7 @@ Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
   ```
 - Then install the packages `pip install -r requirements.txt`
   ```shell
-  pip install -r requiremnts.txt
+  pip install -r requirements.txt
   ```
 
 <a id="get_started"></a>
