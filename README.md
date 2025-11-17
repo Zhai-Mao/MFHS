@@ -37,7 +37,7 @@ Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
   ```shell
   pip install -e.
   ```
-- Then install the packages `pip install -r requiremnts.txt`
+- Then install the packages `pip install -r requirements.txt`
   ```shell
   pip install -r requiremnts.txt
   ```
