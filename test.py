@@ -17,14 +17,14 @@ from model.net_factory import net_factory
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='data/ACDC', help='Name of Experiment')
+                    default='ACDC/data', help='Name of Experiment')
 parser.add_argument('--exp', type=str,
-                    default='kits23/TransHyper', help='experiment_name')
+                    default='TransHyper', help='experiment_name')
 parser.add_argument('--model', type=str,
-                    default='SAM2UNetL', help='model_name')
+                    default='SAM2UNetT', help='model_name')
 parser.add_argument('--num_classes', type=int,  default=4,
                     help='output channel of network')
-parser.add_argument('--labeled_num', type=int, default=3,
+parser.add_argument('--labeled_num', type=int, default=7,
                     help='labeled data')
 
 def calculate_metric_percase(pred, gt):
@@ -36,7 +36,7 @@ def calculate_metric_percase(pred, gt):
     return dice, hd95, asd
 
 def test_single_volume(case, net, test_save_path, FLAGS):
-    h5f = h5py.File(FLAGS.root_path + "/test/data/{}.h5".format(case), 'r')
+    h5f = h5py.File(FLAGS.root_path + "/{}.h5".format(case), 'r')
     image = h5f['image'][:]
     label = h5f['label'][:]
     prediction = np.zeros_like(label)
@@ -78,9 +78,9 @@ def Inference(FLAGS):
         image_list = f.readlines()
     image_list = sorted([item.replace('\n', '').split(".")[0]
                          for item in image_list])
-    snapshot_path = "model/{}_{}/{}".format(
+    snapshot_path = "work_dir/{}_{}/{}".format(
         FLAGS.exp, FLAGS.labeled_num, FLAGS.model)
-    test_save_path = "model/{}_{}/{}_predictions/".format(
+    test_save_path = "work_dir/{}_{}/{}_predictions/".format(
         FLAGS.exp, FLAGS.labeled_num, FLAGS.model)
     if os.path.exists(test_save_path):
         shutil.rmtree(test_save_path)
@@ -88,7 +88,7 @@ def Inference(FLAGS):
     net = net_factory(net_type=FLAGS.model, in_chns=1,
                       class_num=FLAGS.num_classes)
     save_mode_path = os.path.join(
-        snapshot_path, 'model1_iter_24800_dice_0.8671.pth'.format(FLAGS.model))
+        snapshot_path, 'model1_iter_28600_dice_0.8729.pth'.format(FLAGS.model))
     net.load_state_dict(torch.load(save_mode_path))
     print("init weight from {}".format(save_mode_path))
     net.eval()
