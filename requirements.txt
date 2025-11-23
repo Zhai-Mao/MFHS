@@ -12,3 +12,4 @@ yacs
 PyYAML
 matplotlib
 medpy
+nibabel
