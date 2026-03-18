@@ -21,7 +21,7 @@ Tested on **Ubuntu** and Models were trained on a **Nvidia RTX 3090**.
 ## 🛠️ Installation
 - Creat a environment  `conda create -n MFHS`  and activate it  `conda activate MFHS`
   ```shell
-  conda create -n MFHS
+  conda create --name tzc python=3.12
   ```
   ```shell
   conda activate MFHS
