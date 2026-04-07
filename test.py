@@ -2,6 +2,8 @@ import argparse
 import os
 import shutil
 
+import re
+import glob
 import h5py
 import nibabel as nib
 import numpy as np
@@ -24,8 +26,14 @@ parser.add_argument('--model', type=str,
                     default='SAM2UNetT', help='model_name')
 parser.add_argument('--num_classes', type=int,  default=4,
                     help='output channel of network')
-parser.add_argument('--labeled_num', type=int, default=7,
+parser.add_argument('--labeled_num', type=int, default=3,
                     help='labeled data')
+# 新增
+parser.add_argument('--checkpoint_dir', type=str,
+                    default='checkpoints_t_consistency__5percent_noadapter_2026_04_05_21_08', 
+                    help='checkpoint directory name')
+parser.add_argument('--num_weights', type=int, default=20,
+                    help='number of recent weights to test')
 
 def calculate_metric_percase(pred, gt):
     pred[pred > 0] = 1
@@ -73,6 +81,44 @@ def test_single_volume(case, net, test_save_path, FLAGS):
     sitk.WriteImage(lab_itk, test_save_path + case + "_gt.nii.gz")
     return first_metric, second_metric, third_metric
 
+# 新增
+def extract_dice_score(filename):
+    """从文件名中提取Dice分数"""
+    # 匹配 dice_数字 的模式，支持小数点
+    match = re.search(r'dice_([0-9.]+?)\.pth', filename)
+    if match:
+        return float(match.group(1))
+    return 0.0
+
+def extract_iter_number(filename):
+    """从文件名中提取迭代次数"""
+    # 匹配 iter_数字 的模式
+    match = re.search(r'model_one_Mmodel_iter_(\d+)', filename)
+    if match:
+        return int(match.group(1))
+    return 0
+
+def get_top_checkpoints_by_dice(checkpoint_dir, num_weights=10):
+    """获取Dice分数最高的num_weights个权重文件"""
+    # 获取所有.pth文件
+    pth_files = glob.glob(os.path.join(checkpoint_dir, "*.pth"))
+    # 提取Dice分数
+    file_with_dice = []
+    for f in pth_files:
+        basename = os.path.basename(f)
+        dice_score = extract_dice_score(basename)
+        if dice_score > 0:  # 只保留能提取到Dice分数的文件
+            iter_num = extract_iter_number(basename)
+            file_with_dice.append((dice_score, iter_num, f))
+
+    # 按Dice分数降序排序（从高到低）
+    file_with_dice.sort(key=lambda x: x[0], reverse=True)
+    # 取前num_weights个
+    top_files = file_with_dice[:num_weights]
+    return top_files
+
+        
+
 def Inference(FLAGS):
     with open(FLAGS.root_path + '/test.list', 'r') as f:
         image_list = f.readlines()
@@ -80,35 +126,45 @@ def Inference(FLAGS):
                          for item in image_list])
     snapshot_path = "work_dir/{}_{}/{}".format(
         FLAGS.exp, FLAGS.labeled_num, FLAGS.model)
-    test_save_path = "work_dir/{}_{}/{}_predictions/".format(
+    test_save_path = "work_dir/{}_{}/{}_predictions_5percent_noadapter_2026_04_05_21_08/".format(
         FLAGS.exp, FLAGS.labeled_num, FLAGS.model)
     if os.path.exists(test_save_path):
         shutil.rmtree(test_save_path)
     os.makedirs(test_save_path)
-    net = net_factory(net_type=FLAGS.model, in_chns=1,
-                      class_num=FLAGS.num_classes)
-    save_mode_path = os.path.join(
-        snapshot_path, 'model1_iter_28600_dice_0.8729.pth'.format(FLAGS.model))
-    net.load_state_dict(torch.load(save_mode_path))
-    print("init weight from {}".format(save_mode_path))
-    net.eval()
 
-    first_total = 0.0
-    second_total = 0.0
-    third_total = 0.0
-    for case in tqdm(image_list):
-        first_metric, second_metric, third_metric = test_single_volume(
-            case, net, test_save_path, FLAGS)
-        first_total += np.asarray(first_metric)
-        second_total += np.asarray(second_metric)
-        third_total += np.asarray(third_metric)
-    avg_metric = [first_total / len(image_list), second_total /
-                  len(image_list), third_total / len(image_list)]
+    # 完整的checkpoint路径
+    checkpoint_full_path = os.path.join(snapshot_path, FLAGS.checkpoint_dir)
+    
+    # 获取Dice分数最高的num_weights个权重文件
+    top_checkpoints = get_top_checkpoints_by_dice(checkpoint_full_path, FLAGS.num_weights)
+
+    for weight_idx, (dice_score, iter_num, save_mode_path) in enumerate(top_checkpoints):
+    
+        net = net_factory(net_type=FLAGS.model, in_chns=1,
+                          class_num=FLAGS.num_classes)
+        # save_mode_path = os.path.join(
+        #     snapshot_path, 'checkpoints_t_consistency_14percent_tmax150_2026_04_04_19_14/model_one_Mmodel_iter_15800_dice_0.8844.pth'.format(FLAGS.model))
+        net.load_state_dict(torch.load(save_mode_path))
+        print("init weight from {}".format(save_mode_path))
+        net.eval()
+    
+        first_total = 0.0
+        second_total = 0.0
+        third_total = 0.0
+        for case in tqdm(image_list):
+            first_metric, second_metric, third_metric = test_single_volume(
+                case, net, test_save_path, FLAGS)
+            first_total += np.asarray(first_metric)
+            second_total += np.asarray(second_metric)
+            third_total += np.asarray(third_metric)
+        avg_metric = [first_total / len(image_list), second_total /
+                      len(image_list), third_total / len(image_list)]
+        print((avg_metric[0]+avg_metric[1]+avg_metric[2])/3)
     return avg_metric
 
 
 if __name__ == '__main__':
     FLAGS = parser.parse_args()
     metric = Inference(FLAGS)
-    print(metric)
-    print((metric[0]+metric[1]+metric[2])/3)
+    # print(metric)
+    # print((metric[0]+metric[1]+metric[2])/3)
