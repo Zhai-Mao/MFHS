@@ -37,14 +37,26 @@ from model.Discriminator import Discriminator, FCDiscriminator
 from val_2D import (test_single_volume, test_single_volume_one_model)
 from dataloaders.dataset import (BaseDataSets, RandomGenerator,TwoStreamBatchSampler)
 
-sys.path.append("/root/autodl-tmp") 
+# 定义颜色常量
+class Color:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    RESET = '\033[0m'  # 重置颜色
+
+sys.path.append("/root/autodl-tmp/MFHS") 
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'model'))
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str, default='ACDC/data/slices', help='name of Experiment')
 parser.add_argument('--val_root_path', type=str, default='ACDC/data',help='name of val path')
 parser.add_argument('--exp', type=str, default="TransHyper", help="experiment_name")
-parser.add_argument('--model', type=str, default='SAM2UNetL', help='model_name')
+parser.add_argument('--model', type=str, default='SAM2UNetT', help='model_name')
 parser.add_argument('--max_iterations', type=int, default=40000, help='maximum epoch number to train')
 parser.add_argument('--batch_size', type=int, default=16, help='batch size per gpu')
 parser.add_argument('--deterministic', type=int, default=1, help='whether use deterministic training')
@@ -78,7 +90,7 @@ parser.add_argument("--lambda-adv-target1", type=float, default=0.001,
 parser.add_argument("--lambda-adv-target2", type=float, default=0.001,
                         help="lambda_adv for adversarial training.")
 
-parser.add_argument("--hiera_path", type=str, default="sam2_hiera_large.pt", 
+parser.add_argument("--hiera_path", type=str, default="MedSAM2_latest.pt", 
                     help="path to the sam2 pretrained hiera")
 
 args = parser.parse_args()
@@ -119,9 +131,9 @@ def train(args, snapshot_path):
 
     lr_ds = args.lr
     
-    model_D1 = FCDiscriminator(num_classes=1)
-    model_D2 = FCDiscriminator(num_classes=1)
-    model_D3 = FCDiscriminator(num_classes=1)
+    model_D1 = FCDiscriminator(num_classes=4)
+    model_D2 = FCDiscriminator(num_classes=4)
+    model_D3 = FCDiscriminator(num_classes=4)
     model_D1.train()
     model_D1.cuda()
 
@@ -182,7 +194,7 @@ def train(args, snapshot_path):
     
     logging.info("{} iterations per epoch".format(len(trainloader)))
     
-    results_path = os.path.join(snapshot_path, 'results_train_2d_one_M_shape_model_notensorboard_mutual_train_discriminator_softmax_FCdiscriminatorv2_3decoder_add_modeltrain_encoder2hyper_10thres1_iteration40000_1hyper_SAM2UNet__largerbase_lr0_1_3')
+    results_path = os.path.join(snapshot_path, 'results_train_2d_test_2026_04_08_15_20')
     os.makedirs(results_path, exist_ok=True)
     scalar_csv_path = os.path.join(results_path, 'scalars.csv')
     with open(scalar_csv_path, 'w', newline='') as csvfile:
@@ -230,6 +242,31 @@ def train(args, snapshot_path):
             volume_batch, label_batch = Variable(volume_batch).cuda(), label_batch.cuda()
             
             last_output, penultimate_output1, penultimate_output2 = model(volume_batch)
+
+            # --------------------------------------这个下面的部分是这个测试代码-----------------------------------------------------------------#
+
+            # # 打印带颜色的文字
+            # print(f"{Color.RED}last_output shape: {last_output.shape}{Color.RESET}")
+            
+            # # 为统计信息添加颜色（使用不同的颜色区分不同指标）
+            # print(f"{Color.YELLOW}last_output - min: {last_output.min().item():.4f}{Color.RESET}")
+            # print(f"{Color.GREEN}last_output - max: {last_output.max().item():.4f}{Color.RESET}")
+            # print(f"{Color.CYAN}last_output - mean: {last_output.mean().item():.4f}{Color.RESET}")
+            # print(f"{Color.PURPLE}last_output - std: {last_output.std().item():.4f}{Color.RESET}")
+
+            # # 保存图片的目录
+            # debug_img_dir = "debug_outputs"
+            # os.makedirs(debug_img_dir, exist_ok=True)
+
+            # # # 将 logits 转换为预测类别（hard label）
+            # # last_pred = torch.argmax(last_output[batch_idx], dim=0).cpu().numpy()      # [H, W]
+            # # pen1_pred = torch.argmax(penultimate_output1[batch_idx], dim=0).cpu().numpy()
+            # # pen2_pred = torch.argmax(penultimate_output2[batch_idx], dim=0).cpu().numpy()
+
+
+            # --------------------------------------这个上面是这个测试代码------------------------------------------------------------#
+
+            
             last_soft = torch.softmax(last_output, dim=1)
             penultimate_soft1 = torch.softmax(penultimate_output1, dim=1)
             penultimate_soft2 = torch.softmax(penultimate_output2, dim=1)
@@ -295,12 +332,20 @@ def train(args, snapshot_path):
             penultimate_soft22 = torch.softmax(penultimate_output22l, dim=1)
             
             
-            last_output_max_indices = torch.argmax(last_soft2[:args.labeled_bs], dim=1, keepdim=True).float()
-            penultimate_output1_max_indices = torch.argmax(penultimate_soft21[:args.labeled_bs], dim=1, keepdim=True).float()
-            penultimate_output2_max_indices = torch.argmax(penultimate_soft22[:args.labeled_bs], dim=1, keepdim=True).float()
-            last_output_max_indices.requires_grad = True
-            penultimate_output1_max_indices.requires_grad = True
-            penultimate_output2_max_indices.requires_grad = True
+            # last_output_max_indices = torch.argmax(last_soft2[:args.labeled_bs], dim=1, keepdim=True).float()
+            # penultimate_output1_max_indices = torch.argmax(penultimate_soft21[:args.labeled_bs], dim=1, keepdim=True).float()
+            # penultimate_output2_max_indices = torch.argmax(penultimate_soft22[:args.labeled_bs], dim=1, keepdim=True).float()
+            
+            # last_output_max_indices = last_soft2[:args.labeled_bs]# [B,1,H,W]
+            # penultimate_output1_max_indices = torch.max(penultimate_soft21[:args.labeled_bs], dim=1, keepdim=True)[0]
+            # penultimate_output2_max_indices = torch.max(penultimate_soft22[:args.labeled_bs], dim=1, keepdim=True)[0]
+            last_output_max_indices = last_soft2[:args.labeled_bs]
+            penultimate_output1_max_indices = penultimate_soft21[:args.labeled_bs]
+            penultimate_output2_max_indices = penultimate_soft22[:args.labeled_bs]
+            
+            # last_output_max_indices.requires_grad = True
+            # penultimate_output1_max_indices.requires_grad = True
+            # penultimate_output2_max_indices.requires_grad = True
             D_out1 = model_D1(last_output_max_indices)
             D_out2 = model_D2(penultimate_output1_max_indices)
             D_out3 = model_D3(penultimate_output2_max_indices)
@@ -320,30 +365,41 @@ def train(args, snapshot_path):
             for param in model_D3.parameters():
                 param.requires_grad = True
             
-            label_batch_ = label_batch[:args.labeled_bs].float().unsqueeze(1)
-            D_out1x = model_D1(label_batch_)
-            D_out2x = model_D2(label_batch_)
-            D_out3x = model_D3(label_batch_)
+            # label_batch_ = label_batch[:args.labeled_bs].float().unsqueeze(1)
+            B, H, W = label_batch[:args.labeled_bs].shape
+            label_onehot = torch.zeros(B, 4, H, W).cuda()
+            label_onehot.scatter_(1, label_batch[:args.labeled_bs].unsqueeze(1).long(), 1)
+            D_out1x = model_D1(label_onehot)
+            D_out2x = model_D2(label_onehot)
+            D_out3x = model_D3(label_onehot)
             loss_D1 = bce_loss(D_out1x, Variable(torch.FloatTensor(D_out1x.data.size()).fill_(target_label)).cuda())
             loss_D2 = bce_loss(D_out2x, Variable(torch.FloatTensor(D_out2x.data.size()).fill_(target_label)).cuda())
             loss_D3 = bce_loss(D_out3x, Variable(torch.FloatTensor(D_out3x.data.size()).fill_(target_label)).cuda())
             
-            loss_D1.backward()
-            loss_D2.backward()
-            loss_D3.backward()
+            # loss_D1.backward()
+            # loss_D2.backward()
+            # loss_D3.backward()
 
-            last_output_max_indices1 = torch.argmax(last_soft[:args.labeled_bs].detach(), dim=1, keepdim=True).float()
-            penultimate_output_max_indices11 = torch.argmax(penultimate_soft1[:args.labeled_bs].detach(), dim=1, keepdim=True).float()
-            penultimate_output_max_indices12 = torch.argmax(penultimate_soft2[:args.labeled_bs].detach(), dim=1, keepdim=True).float()
+            # last_output_max_indices1 = torch.argmax(last_soft[:args.labeled_bs].detach(), dim=1, keepdim=True).float()
+            # penultimate_output_max_indices11 = torch.argmax(penultimate_soft1[:args.labeled_bs].detach(), dim=1, keepdim=True).float()
+            # penultimate_output_max_indices12 = torch.argmax(penultimate_soft2[:args.labeled_bs].detach(), dim=1, keepdim=True).float()
+            last_output_max_indices1 = last_soft[:args.labeled_bs].detach()
+            penultimate_output_max_indices11 = penultimate_soft1[:args.labeled_bs].detach()
+            penultimate_output_max_indices12 = penultimate_soft2[:args.labeled_bs].detach()
             D_out1l = model_D1(last_output_max_indices1)
             D_out2l = model_D2(penultimate_output_max_indices11)
             D_out3l = model_D3(penultimate_output_max_indices12)
-            loss_D1 = bce_loss(D_out1l, Variable(torch.FloatTensor(D_out1l.data.size()).fill_(source_label)).cuda())
-            loss_D2 = bce_loss(D_out2l, Variable(torch.FloatTensor(D_out2l.data.size()).fill_(source_label)).cuda())
-            loss_D3 = bce_loss(D_out3l, Variable(torch.FloatTensor(D_out3l.data.size()).fill_(source_label)).cuda())
-            loss_D1.backward()
-            loss_D2.backward()
-            loss_D3.backward()
+            loss_D1_fake = bce_loss(D_out1l, Variable(torch.FloatTensor(D_out1l.data.size()).fill_(source_label)).cuda())
+            loss_D2_fake = bce_loss(D_out2l, Variable(torch.FloatTensor(D_out2l.data.size()).fill_(source_label)).cuda())
+            loss_D3_fake = bce_loss(D_out3l, Variable(torch.FloatTensor(D_out3l.data.size()).fill_(source_label)).cuda())
+
+            loss_D1_total = loss_D1 + loss_D1_fake
+            loss_D2_total = loss_D2 + loss_D2_fake
+            loss_D3_total = loss_D3 + loss_D3_fake
+            
+            loss_D1_total.backward()
+            loss_D2_total.backward()
+            loss_D3_total.backward()
 
             optimizer.step()
             optimizer_D1.step()
@@ -360,8 +416,8 @@ def train(args, snapshot_path):
                 writer = csv.writer(csvfile)
                 writer.writerow([iter_num, lr_, consistency_weight, loss.item()])
             
-            logging.info('iteration %d : model1 loss : %f model2 loss : %f model2 loss : %f' % (
-                iter_num, model1_loss.item(), model2_loss.item(), model3_loss.item()))
+            logging.info('iteration %d : model1 loss : %f model2 loss : %f model3 loss : %f loss_adv_target1 : %f loss_adv_target2 : %f loss_adv_target3 : %f' % (
+                iter_num, model1_loss.item(), model2_loss.item(), model3_loss.item(), loss_adv_target1.item(), loss_adv_target2.item(), loss_adv_target3.item()))
             
             if iter_num % 50 == 0:
                 try:
@@ -428,10 +484,10 @@ def train(args, snapshot_path):
                 
                 if performance1 > best_performance1:
                     best_performance1 = performance1
-                    save_mode_path = os.path.join(snapshot_path,
+                    save_mode_path = os.path.join(checkpoint_dir,
                                                   'model_one_Mmodel_iter_{}_dice_{}.pth'.format(
                                                       iter_num, round(best_performance1, 4)))
-                    save_best = os.path.join(snapshot_path,
+                    save_best = os.path.join(checkpoint_dir,
                                              '{}_best_model_one_Mmodel.pth'.format(args.model))
                     torch.save(model.state_dict(), save_mode_path)
                     torch.save(model.state_dict(), save_best)
@@ -459,7 +515,7 @@ def train(args, snapshot_path):
                 
                 if performance2 > best_performance2:
                     best_performance2 = performance2
-                    save_mode_path = os.path.join(snapshot_path, 'model1_iter_{}_dice_{}.pth'.format(iter_num, round(best_performance2, 4)))
+                    save_mode_path = os.path.join(checkpoint_dir, 'model1_iter_{}_dice_{}.pth'.format(iter_num, round(best_performance2, 4)))
                     torch.save(model.state_dict(), save_mode_path)
                     torch.save(model.state_dict(), save_best)
                     
@@ -469,7 +525,7 @@ def train(args, snapshot_path):
                 
             if iter_num % 3000 == 0:
                 save_mode_path = os.path.join(
-                    snapshot_path, 'model1_iter_' + str(iter_num) + '.pth')
+                    checkpoint_dir, 'model1_iter_' + str(iter_num) + '.pth')
                 torch.save(model.state_dict(), save_mode_path)
                 logging.info("save model1 to {}".format(save_mode_path))
                 
@@ -500,6 +556,8 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(args.seed)
     
     snapshot_path = "work_dir/{}_{}/{}".format(args.exp, args.labeled_num, args.model)
+    checkpoint_dir = os.path.join(snapshot_path, "checkpoints_t_consistency__5percent_test_2026_04_08_15_20")
+    os.makedirs(checkpoint_dir, exist_ok=True)
     if not os.path.exists(snapshot_path):
         os.makedirs(snapshot_path)
     
